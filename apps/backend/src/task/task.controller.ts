@@ -22,7 +22,7 @@ export class TaskController {
   // GET auth belong to the user /tasks
   @Get()
   findAll(@Request() req) {
-    const userId = req.user.id;
+    const userId = req.user.sub;
     return this.taskService.findAll(userId);
   }
 
