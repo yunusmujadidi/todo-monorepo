@@ -21,7 +21,7 @@ model User {
   email String @unique
 
   // make username optional since we have email for login and register
-  username String? @unique
+  username String?
   password String
 
   createdAt DateTime @default(now())
