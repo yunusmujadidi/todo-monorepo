@@ -47,7 +47,8 @@ model Task {
   description String
   status      Status   @default(TODO)
   deadline    DateTime
-  createdBy   String
+  // make optional
+  createdBy   String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

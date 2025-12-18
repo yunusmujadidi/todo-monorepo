@@ -11,6 +11,7 @@ import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 
+// TODO: add route protection
 @Controller('tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}

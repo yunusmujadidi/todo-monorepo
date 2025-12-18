@@ -7,12 +7,15 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { SignInDto } from './dto/sign-in.dto';
+import { JwtService } from '@nestjs/jwt';
 
 //
 @Injectable()
 export class AuthService {
-  // TODO: create jwt service
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
   // register
   // TODO: add prisma error handler on sign up
@@ -27,6 +30,7 @@ export class AuthService {
     const user = await this.usersService.create(signUpDto, hashPassword);
 
     const { password, ...result } = user;
+    // add jwt token?
     return result;
   }
 
@@ -43,7 +47,14 @@ export class AuthService {
     );
     if (!validPassword)
       throw new UnauthorizedException('Email or password is wrong');
-  }
 
-  // TODO: return jwt token
+    const payload = {
+      sub: user.id,
+      email: user.email,
+    };
+
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
+  }
 }
