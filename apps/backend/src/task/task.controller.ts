@@ -6,43 +6,55 @@ import {
   Param,
   Patch,
   Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
-// TODO: add route protection
 @Controller('tasks')
+@UseGuards(AuthGuard)
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
-  // GET auth /tasks
+  // GET auth belong to the user /tasks
   @Get()
-  findAll() {
-    return this.taskService.findAll();
+  findAll(@Request() req) {
+    const userId = req.user.id;
+    return this.taskService.findAll(userId);
   }
 
-  // GET auth /tasks
+  // GET auth belong to the user /tasks
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskService.findOne(id);
+  findOne(@Param('id') id: string, @Request() req) {
+    const userId = req.user.sub;
+    return this.taskService.findOne(id, userId);
   }
 
-  // POST auth /tasks
+  // POST auth belong to the user /tasks
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.taskService.create(createTaskDto);
+  create(@Body() createTaskDto: CreateTaskDto, @Request() req) {
+    const userId = req.user.sub;
+    return this.taskService.create(createTaskDto, userId);
   }
 
-  // PATCH auth /tasks/:id
+  // PATCH auth  belong to the user /tasks/:id
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.taskService.update(id, updateTaskDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+    @Request() req,
+  ) {
+    const userId = req.user.sub;
+    return this.taskService.update(id, updateTaskDto, userId);
   }
 
-  // DELETE auth /tasks/:id
+  // DELETE auth belong to the user  /tasks/:id
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.taskService.delete(id);
+  delete(@Param('id') id: string, @Request() req) {
+    const userId = req.user.sub;
+    return this.taskService.delete(id, userId);
   }
 }

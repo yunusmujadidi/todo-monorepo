@@ -4,7 +4,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUUID,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -34,8 +33,4 @@ export class CreateTaskDto {
   @IsOptional()
   @IsString()
   createdBy?: string;
-
-  @IsUUID()
-  @IsNotEmpty()
-  userId: string;
 }

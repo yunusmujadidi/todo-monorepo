@@ -1,5 +1,9 @@
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 
@@ -7,20 +11,37 @@ import { CreateTaskDto } from './dto/create-task.dto';
 export class TaskService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
-    return await this.prisma.task.findMany();
-  }
-
-  async findOne(id: string) {
-    return await this.prisma.task.findUnique({
-      where: { id },
+  async findAll(userId: string) {
+    return await this.prisma.task.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
-  async create(createTaskDto: CreateTaskDto) {
+  async findOne(id: string, userId: string) {
+    const result = await this.prisma.task.findUnique({
+      where: { id },
+    });
+
+    if (!result) {
+      throw new NotFoundException('Task not found');
+    }
+
+    // compare to userId
+    if (result.userId !== userId) {
+      throw new ForbiddenException('Cannot access to this task');
+    }
+
+    return result;
+  }
+
+  async create(createTaskDto: CreateTaskDto, userId: string) {
     try {
       return await this.prisma.task.create({
-        data: createTaskDto,
+        data: {
+          ...createTaskDto,
+          userId,
+        },
       });
     } catch (error) {
       if (error.code === 'P2003') {
@@ -30,7 +51,10 @@ export class TaskService {
     }
   }
 
-  async update(id: string, updateTaskDto: UpdateTaskDto) {
+  async update(id: string, updateTaskDto: UpdateTaskDto, userId: string) {
+    // check task belong to user
+    await this.findOne(id, userId);
+
     try {
       return await this.prisma.task.update({
         where: { id },
@@ -44,7 +68,9 @@ export class TaskService {
     }
   }
 
-  async delete(id: string) {
+  async delete(id: string, userId: string) {
+    // check task belong to user
+    await this.findOne(id, userId);
     try {
       return await this.prisma.task.delete({
         where: { id },
