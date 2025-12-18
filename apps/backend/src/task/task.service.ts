@@ -6,15 +6,26 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { Status } from 'generated/prisma/enums';
 
 @Injectable()
 export class TaskService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(userId: string) {
+  async findAll(
+    userId: string,
+    status?: Status,
+    sortBy?: 'deadline' | 'createdAt',
+  ) {
+    // default = close deadline otherwise newest input
+    const orderBy =
+      sortBy === 'deadline'
+        ? { deadline: 'asc' as const }
+        : { createdAt: 'desc' as const };
+
     return await this.prisma.task.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
+      where: { userId, ...(status && { status }) },
+      orderBy,
     });
   }
 
