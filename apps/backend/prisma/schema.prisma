@@ -16,10 +16,12 @@ datasource db {
 
 // auth section
 model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  username String @unique
+  id    String @id @default(uuid())
+  name  String
+  email String @unique
+
+  // make username optional since we have email for login and register
+  username String? @unique
   password String
 
   createdAt DateTime @default(now())
