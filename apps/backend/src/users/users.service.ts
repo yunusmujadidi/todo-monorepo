@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 // TODO: make auth guard protection
 // TODO: make auth service, controller, module, and jwt strategiew
+// TODO: add prisma error handler
 
 @Injectable()
 export class UsersService {
@@ -24,10 +25,20 @@ export class UsersService {
     });
   }
 
+  // find by email for login
+  async findByEmail(email: string) {
+    return await this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
   // create user
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, hashPassword: string) {
     return await this.prisma.user.create({
-      data: createUserDto,
+      data: {
+        ...createUserDto,
+        password: hashPassword,
+      },
     });
   }
 
