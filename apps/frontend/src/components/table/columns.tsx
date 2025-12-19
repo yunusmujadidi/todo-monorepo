@@ -2,22 +2,11 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  ArrowUpDown,
-  MoreHorizontal,
-  CircleCheck,
-  Loader,
-  Circle,
-} from "lucide-react";
+import { ArrowUpDown, CircleCheck, Loader, Circle } from "lucide-react";
 import { Task } from "@/lib/types";
 import { statusLabels } from "@/lib/utils";
 import { Badge } from "../ui/badge";
+import { TaskActionButton } from "./action-button";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -125,28 +114,6 @@ export const columns: ColumnDef<Task>[] = [
   {
     id: "actions",
     header: "Actions",
-    cell: () => {
-      return (
-        //   TODO: implement onclick handler
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {}}>Mark To Do</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {}}>
-              Mark In Progress
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {}}>Mark Done</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {}} className="text-destructive">
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <TaskActionButton row={row} />,
   },
 ];
