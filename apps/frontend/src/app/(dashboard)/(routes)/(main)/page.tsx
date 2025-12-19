@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button";
+import { Title } from "@/components/layout/title";
 
 const DashboardPage = () => {
   return (
-    <div>
-      <p className="text-4xl text-blue-500">main page</p>
-      <div>
-        <Button variant="outline">Test123</Button>
-      </div>
-    </div>
+    <>
+      <Title
+        title="Dashboard"
+        description="Welcome back!. Manage your tasks here"
+      />
+    </>
   );
 };
 export default DashboardPage;
