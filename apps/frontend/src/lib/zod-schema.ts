@@ -17,3 +17,13 @@ export const SignUpSchema = z
     message: "Password is not same.",
     path: ["confirmPassword"],
   });
+
+export const taskSchema = z.object({
+  title: z.string().min(3, "Title min 3 char").max(60, "Title max 60 char"),
+  description: z
+    .string()
+    .min(3, "Description min 3 char")
+    .max(160, "Description max 160 char"),
+  status: z.enum(["TODO", "IN_PROGRESS", "DONE"]).optional(),
+  deadline: z.string().min(1, "Deadline required"),
+});
