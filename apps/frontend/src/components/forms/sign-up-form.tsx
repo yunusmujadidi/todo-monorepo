@@ -14,25 +14,13 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
+import { SignUpSchema } from "@/lib/zod-schema";
 
 // TODO: implement onsubmit func for sign up
 
-const SignUpFormSchema = z
-  .object({
-    name: z.string(),
-    email: z.email(),
-    username: z.string().optional(),
-    password: z.string().min(6, "Password min 6 char!."),
-    confirmPassword: z.string().min(6, "Password min 6 char!."),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Password is not same.",
-    path: ["confirmPassword"],
-  });
-
 export const SignUpForm = () => {
-  const form = useForm<z.infer<typeof SignUpFormSchema>>({
-    resolver: zodResolver(SignUpFormSchema),
+  const form = useForm<z.infer<typeof SignUpSchema>>({
+    resolver: zodResolver(SignUpSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -42,7 +30,7 @@ export const SignUpForm = () => {
     },
   });
 
-  const handleSubmit = async (data: z.infer<typeof SignUpFormSchema>) => {
+  const handleSubmit = async (data: z.infer<typeof SignUpSchema>) => {
     console.log("signup:", data);
   };
 

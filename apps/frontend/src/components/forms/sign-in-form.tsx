@@ -7,13 +7,9 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
+import { signInSchema } from "@/lib/zod-schema";
 
 // TODO: implement onsubmit func
-
-const signInSchema = z.object({
-  email: z.email(),
-  password: z.string(),
-});
 
 export const SignInForm = () => {
   const form = useForm({
