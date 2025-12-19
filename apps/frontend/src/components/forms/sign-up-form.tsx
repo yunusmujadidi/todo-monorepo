@@ -15,10 +15,13 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import { SignUpSchema } from "@/lib/zod-schema";
-
-// TODO: implement onsubmit func for sign up
+import { authApi } from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const SignUpForm = () => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -31,7 +34,22 @@ export const SignUpForm = () => {
   });
 
   const handleSubmit = async (data: z.infer<typeof SignUpSchema>) => {
-    console.log("signup:", data);
+    try {
+      // remove confirmPassword
+
+      await authApi.signUp({
+        email: data.email,
+        name: data.name,
+        password: data.password,
+        username: data.username,
+      });
+      toast.success("Sign up succesfully!");
+      router.push("/sign-in");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const message = error.response?.data?.message || "Sign Up failed";
+      form.setError("root", { message });
+    }
   };
 
   return (

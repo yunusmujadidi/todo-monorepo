@@ -8,10 +8,13 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import { signInSchema } from "@/lib/zod-schema";
-
-// TODO: implement onsubmit func
+import { authApi } from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const SignInForm = () => {
+  const router = useRouter();
+
   const form = useForm({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -20,8 +23,21 @@ export const SignInForm = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof signInSchema>) => {
-    console.log("submitted:", data);
+  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+    try {
+      const res = await authApi.signIn(data);
+      // save token to cookies
+      const saveToken = (token: string) => {
+        document.cookie = `token=${token}; path=/`;
+      };
+      saveToken(res.access_token);
+      toast.success("Sign in successfully!");
+      router.push("/");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const message = error.response?.data?.message || "Sign In failed";
+      form.setError("root", { message });
+    }
   };
 
   return (
