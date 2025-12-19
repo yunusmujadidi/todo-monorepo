@@ -16,10 +16,12 @@ const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// token req interceptor
 api.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("token");
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
