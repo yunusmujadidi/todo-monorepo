@@ -2,6 +2,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
+  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
@@ -9,15 +10,24 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { navigation } from "@/lib/consts";
+import { Plus } from "lucide-react";
 
 import Link from "next/link";
+import { SidebarHeader } from "./sidebar-header";
+import { SidebarFooter } from "./sidebar-footer";
 
 export function AppSidebar() {
+  // TODO: fetch user
   return (
     <Sidebar variant="inset" collapsible="icon">
+      <SidebarHeader />
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Task Management</SidebarGroupLabel>
+          {/* TODO: implement add task to task hook */}
+          <SidebarGroupLabel>Task </SidebarGroupLabel>
+          <SidebarGroupAction>
+            <Plus /> <span className="sr-only">Dark mode</span>
+          </SidebarGroupAction>
 
           <SidebarGroupContent>
             <SidebarMenu>
@@ -35,6 +45,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter />
     </Sidebar>
   );
 }
