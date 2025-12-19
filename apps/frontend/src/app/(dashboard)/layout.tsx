@@ -8,10 +8,10 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       <AppSidebar />
       <SidebarInset>
         <Navbar />
-        {/* container */}
         <div className="m-4 p-4">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );
 };
+
 export default DashboardLayout;

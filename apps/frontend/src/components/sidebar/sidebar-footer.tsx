@@ -20,17 +20,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/hooks/use-auth";
+import { useRouter } from "next/navigation";
 
 export const SidebarFooter = () => {
   // get theme and setTheme from hooks
   const { setTheme, theme } = useTheme();
   const isMobile = useIsMobile();
+
+  const { signOut } = useAuth();
+  const router = useRouter();
   // TODO: add real user
   const user = {
     avatar: "/",
     name: "yunusmujadidi",
     email: "yunusmujadidi@gmail.com",
   };
+
   return (
     <SidebarFooterComponent>
       <SidebarMenu>
@@ -97,7 +103,12 @@ export const SidebarFooter = () => {
               </DropdownMenuCheckboxItem>
               <DropdownMenuSeparator />
               {/* TODO: implement logout action */}
-              <DropdownMenuItem disabled>
+              <DropdownMenuItem
+                onClick={() => {
+                  signOut();
+                  router.push("/sign-in");
+                }}
+              >
                 <LogOut />
                 Log out
               </DropdownMenuItem>
