@@ -1,115 +1,141 @@
-# Turborepo
+# task management system
 
-## What's inside?
+simple todo app with auth
 
-This Turborepo includes the following packages/apps:
+## description
 
-### Utilities
+web app for managing tasks. users can sign up, login, and manage their own tasks. built with next.js and nestjs.
 
-This Turborepo has some additional tools already setup for you:
+## how to run
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+### prerequisites
 
-### Build
+- node.js 18+
+- pnpm
+- postgresql
 
-To build all apps and packages, run the following command:
+### install
 
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+```bash
+git clone <your-repo-url>
+cd todo-monorepo
+pnpm install
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+### backend setup
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+```bash
+cd apps/backend
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+# create .env file
+DATABASE_URL="postgresql://user:password@localhost:5432/taskdb"
+JWT_SECRET="your-secret-key"
+PORT=3001
 
-### Develop
+# setup database
+npx prisma generate
+npx prisma migrate dev --name init
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+# run
+pnpm dev
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+backend runs at: http://localhost:3001
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+### frontend setup
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+```bash
+cd apps/frontend
 
-### Remote Caching
+# create .env.local file
+NEXT_PUBLIC_API_URL="http://localhost:3001"
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+# run
+pnpm dev
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+frontend runs at: http://localhost:3000
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+### or run both from root
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+```bash
+pnpm dev
 ```
 
-## Useful Links
+## tech stack
 
-Learn more about the power of Turborepo:
+**frontend**: next.js 16, react 19, typescript, tailwind 4, shadcn/ui, zustand
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+**backend**: nestjs 11, prisma 7, postgresql, jwt, bcrypt
+
+**monorepo**: turborepo, pnpm
+
+## demo login
+
+```
+email: yunusmujadidi@gmail.com
+password: 12345678
+```
+
+## features
+
+- user auth (signup/login) with jwt
+- crud tasks
+- filter by status
+- sort by deadline/date
+- search tasks
+- update status via dropdown
+- delete confirmation
+- toast notifications
+- dark/light mode
+- pagination & sorting
+- responsive design
+
+## screenshots
+
+### login page
+
+![Login](./screenshots/login.png)
+
+### dashboard
+
+![Dashboard](./screenshots/dashboard.png)
+
+### create task
+
+![Create Task](./screenshots/create.png)
+
+### update task
+
+![Update Task](./screenshots/update.png)
+
+## api endpoints
+
+### auth
+
+- `POST /auth/sign-up` - register
+- `POST /auth/sign-in` - login
+
+### tasks (protected)
+
+- `GET /tasks` - get all tasks
+- `GET /tasks?status=TODO` - filter by status
+- `GET /tasks?sortBy=deadline` - sort by deadline
+- `GET /tasks/:id` - get single task
+- `POST /tasks` - create task
+- `PATCH /tasks/:id` - update task
+- `DELETE /tasks/:id` - delete task
+
+## project structure
+
+```
+todo-monorepo/
+├── apps/
+│   ├── backend/         # nestjs api
+│   └── frontend/        # next.js app
+├── packages/            # shared configs
+├── screenshots/         # app screenshots
+├── db.sql              # database schema
+├── postman_collection.json
+└── README.md
+```

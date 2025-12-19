@@ -1,0 +1,314 @@
+{
+  "info": {
+    "_postman_id": "825d6aac-1489-427d-8949-c3621cf74c74",
+    "name": "Task Management API",
+    "description": "API collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "21004254"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Sign Up",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Yunus Mujadidi\",\n  \"email\": \"yunusmujadidi@gmail.com\",\n  \"username\": \"yunusmujadidi\",\n  \"password\": \"12345678\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/auth/sign-up",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["auth", "sign-up"]
+            },
+            "description": "Register a new user account"
+          },
+          "response": []
+        },
+        {
+          "name": "Sign In",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.environment.set(\"access_token\", jsonData.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"yunusmujadidi@gmail.com\",\n  \"password\": \"12345678\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/auth/sign-in",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["auth", "sign-in"]
+            },
+            "description": "Login and receive JWT access token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Get All Tasks",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/tasks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["tasks"]
+            },
+            "description": "Retrieve all tasks for the authenticated user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tasks by Status",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/tasks?status=TODO",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["tasks"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "TODO",
+                  "description": "Filter by status: TODO, IN_PROGRESS, or DONE"
+                }
+              ]
+            },
+            "description": "Filter tasks by status (TODO, IN_PROGRESS, DONE)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tasks Sorted by Deadline",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/tasks?sortBy=deadline",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["tasks"],
+              "query": [
+                {
+                  "key": "sortBy",
+                  "value": "deadline",
+                  "description": "Sort by deadline or createdAt"
+                }
+              ]
+            },
+            "description": "Retrieve tasks sorted by deadline"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Task",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/tasks/e0a2acc0-0dba-4162-9772-3a8408d0f7c5",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["tasks", "e0a2acc0-0dba-4162-9772-3a8408d0f7c5"]
+            },
+            "description": "Retrieve a specific task by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Task",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMGU4ODA1Yy0wM2ZlLTRjMTctOTRhYS1jYzZmNjQyOTc4ZGYiLCJlbWFpbCI6Inl1bnVzbXVqYWRpZGlAZ21haWwuY29tIiwiaWF0IjoxNzY2MTMwMDA1LCJleHAiOjE3NjYzODkyMDV9.Bsv5Gw4O9zB8YtvecLXhp0L3hItERtD9VNqnzFI63mY",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"test123\",\n  \"description\": \"tasdkasdamakabasdasd bang\",\n  \"status\": \"TODO\",\n  \"deadline\": \"2024-12-31T23:59:59.000Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/tasks",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["tasks"]
+            },
+            "description": "Create a new task"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Task",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"IN_PROGRESS\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3001/tasks/e0a2acc0-0dba-4162-9772-3a8408d0f7c5",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["tasks", "e0a2acc0-0dba-4162-9772-3a8408d0f7c5"]
+            },
+            "description": "Update an existing task (partial update)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Task",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/tasks/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3001",
+              "path": ["tasks", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1bfec387-dcd8-4b72-ae8f-4ddab81a8a1d",
+                  "description": "Task ID"
+                }
+              ]
+            },
+            "description": "Delete a task by ID"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3001",
+      "type": "string"
+    }
+  ]
+}
+
