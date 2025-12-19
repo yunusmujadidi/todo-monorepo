@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { SignUpForm } from "@/components/forms/sign-up-form";
 import {
   Card,
   CardContent,
@@ -21,11 +21,10 @@ const SignUpPage = () => {
             Fill this form to sign up to the app
           </CardDescription>
         </CardHeader>
-        <CardContent>sign iup form</CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full">
-            Sign Up
-          </Button>
+        <CardContent>
+          <SignUpForm />
+        </CardContent>
+        <CardFooter className="flex-col gap-2 border-b">
           <div className="mt-6">
             <p className="text-sm ">
               Already have an account?

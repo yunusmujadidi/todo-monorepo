@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { SignInForm } from "@/components/forms/sign-in-form";
 import {
   Card,
   CardContent,
@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 
 // TODO: add sign in form
+
 const SignInPage = () => {
   return (
     // container
@@ -21,11 +22,10 @@ const SignInPage = () => {
             Fill this form to sign in to the app
           </CardDescription>
         </CardHeader>
-        <CardContent>sign in form</CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full">
-            Sign In
-          </Button>
+        <CardContent>
+          <SignInForm />
+        </CardContent>
+        <CardFooter className="flex-col gap-2 border-t">
           <div className="mt-6">
             <p className="text-sm ">
               Don&apos;t have an account?

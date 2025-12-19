@@ -1,0 +1,91 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import z from "zod";
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Loader2 } from "lucide-react";
+
+// TODO: implement onsubmit func
+
+const signInSchema = z.object({
+  email: z.email(),
+  password: z.string(),
+});
+
+export const SignInForm = () => {
+  const form = useForm({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof signInSchema>) => {
+    console.log("submitted:", data);
+  };
+
+  return (
+    <form id="sign-in-form" onSubmit={form.handleSubmit(onSubmit)}>
+      <FieldGroup>
+        {/* email */}
+        <Controller
+          name="email"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+              <Input
+                {...field}
+                id={field.name}
+                type="email"
+                placeholder="your@email.com"
+                aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        {/* password */}
+        <Controller
+          name="password"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+              <Input
+                {...field}
+                id={field.name}
+                type="password"
+                placeholder="********"
+                aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        {/* submit button */}
+        <Button
+          disabled={form.formState.isSubmitting}
+          form="sign-in-form"
+          type="submit"
+          className="w-full"
+        >
+          {form.formState.isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 animate-spin" /> Loading...
+            </>
+          ) : (
+            "Sign In"
+          )}
+        </Button>
+        {form.formState.errors.root && (
+          <FieldError errors={[form.formState.errors.root]} />
+        )}
+      </FieldGroup>
+    </form>
+  );
+};
